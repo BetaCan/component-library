@@ -21,10 +21,12 @@ import { useEffect } from 'react'
 import { HashRouter, Link as RouterLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { CodeTabs } from './components/CodeTabs'
 import { ComponentPreview } from './components/ComponentPreview'
+import { ComponentStatus } from './components/ComponentStatus'
 import { ComponentSearch } from './components/ComponentSearch'
 import { FilterGroup } from './components/FilterGroup'
 import { PropsTable } from './components/PropsTable'
 import { TechnologyChips } from './components/TechnologyChips'
+import { RelatedComponents } from './components/RelatedComponents'
 import { useComponentFilters } from './hooks/useComponentFilters'
 import { componentCatalog, getComponentBySlug } from './catalog/componentCatalog'
 import { usageExamples } from './catalog/usageExamples'
@@ -95,6 +97,7 @@ function ComponentCard({ item }: { item: (typeof componentCatalog)[number] }) {
         />
         <CardContent sx={{ p: 3, flexGrow: 1 }}>
           <Typography variant="overline" color="primary.main" sx={{ fontWeight: 800 }}>{item.category}</Typography>
+          <Box sx={{ mb: 1 }}><ComponentStatus status={item.status} /></Box>
           <Typography variant="h5" sx={{ mt: .5, mb: 1, fontWeight: 800 }}>{item.title}</Typography>
           <Typography color="text.secondary" sx={{ mb: 2 }}>{item.description}</Typography>
           <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
@@ -181,6 +184,7 @@ function DetailPage() {
     <Container maxWidth="md" sx={{ py: { xs: 5, md: 8 } }}>
       <Button startIcon="←" onClick={() => navigate('/')} sx={{ mb: 5 }}>Back to components</Button>
       <Typography variant="overline" component="div" color="primary.main" sx={{ fontWeight: 900, textAlign: 'left' }}>{item.category}</Typography>
+      <Box sx={{ mt: 1, mb: 2 }}><ComponentStatus status={item.status} /></Box>
       <Typography variant="h1" sx={{ fontSize: { xs: '2.8rem', md: '4.5rem' }, mt: 1 }}>{item.title}</Typography>
       <Typography variant="h6" color="text.secondary" sx={{ mt: 2, mb: 4, fontWeight: 400 }}>{item.description}</Typography>
       <ComponentPreview item={item} />
@@ -206,6 +210,8 @@ function DetailPage() {
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>Code</Typography>
       <Typography color="text.secondary" sx={{ mb: 3 }}>Use the tabs to move between the component, an example call, and any supporting files.</Typography>
       <CodeTabs implementationFiles={item.files} usageFile={usageExample} optionalFiles={item.optionalFiles} />
+      <Divider sx={{ my: 6 }} />
+      <RelatedComponents current={item} items={components} />
       <Button variant="contained" href="https://mui.com/material-ui/" target="_blank" sx={{ mt: 4 }}>Read the Material UI docs ↗</Button>
     </Container>
   )

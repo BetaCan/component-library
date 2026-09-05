@@ -18,6 +18,7 @@ export type ComponentItem = {
   tags: string[]
   image: string
   category: string
+  status: 'Stable' | 'Experimental' | 'Needs testing'
   languages: string[]
   technologies: string[]
   keywords: string[]
