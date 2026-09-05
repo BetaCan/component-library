@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import { HashRouter, Link as RouterLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { CodeTabs } from './components/CodeTabs'
+import { ComponentPreview } from './components/ComponentPreview'
 import { ComponentSearch } from './components/ComponentSearch'
 import { FilterGroup } from './components/FilterGroup'
 import { PropsTable } from './components/PropsTable'
@@ -171,6 +172,8 @@ function DetailPage() {
       <Typography variant="overline" component="div" color="primary.main" sx={{ fontWeight: 900, textAlign: 'left' }}>{item.category}</Typography>
       <Typography variant="h1" sx={{ fontSize: { xs: '2.8rem', md: '4.5rem' }, mt: 1 }}>{item.title}</Typography>
       <Typography variant="h6" color="text.secondary" sx={{ mt: 2, mb: 4, fontWeight: 400 }}>{item.description}</Typography>
+      <ComponentPreview item={item} />
+      <Divider sx={{ my: 6 }} />
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>What it does</Typography>
       <Typography color="text.secondary" sx={{ mb: 4, lineHeight: 1.7 }}>{item.guide.whatItDoes}</Typography>
       <Typography variant="h5" sx={{ fontWeight: 800, mb: 2 }}>How it is used</Typography>

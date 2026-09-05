@@ -29,3 +29,7 @@ export type ComponentItem = {
   files: ComponentFile[]
   optionalFiles?: ComponentFile[]
 }
+
+export type PreviewProps = {
+  title: string
+}
