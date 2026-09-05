@@ -21,6 +21,7 @@ import { useEffect } from 'react'
 import { HashRouter, Link as RouterLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { CodeTabs } from './components/CodeTabs'
 import { ComponentPreview } from './components/ComponentPreview'
+import { ImplementationGuide } from './components/ImplementationGuide'
 import { ComponentStatus } from './components/ComponentStatus'
 import { ComponentSearch } from './components/ComponentSearch'
 import { FilterGroup } from './components/FilterGroup'
@@ -207,6 +208,8 @@ function DetailPage() {
       <Typography variant="h1" sx={{ fontSize: { xs: '2.8rem', md: '4.5rem' }, mt: 1 }}>{item.title}</Typography>
       <Typography variant="h6" color="text.secondary" sx={{ mt: 2, mb: 4, fontWeight: 400 }}>{item.description}</Typography>
       <ComponentPreview item={item} />
+      <Divider sx={{ my: 6 }} />
+      <ImplementationGuide item={item} props={props} />
       <Divider sx={{ my: 6 }} />
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>What it does</Typography>
       <Typography color="text.secondary" sx={{ mb: 4, lineHeight: 1.7 }}>{item.guide.whatItDoes}</Typography>

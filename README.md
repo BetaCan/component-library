@@ -79,7 +79,7 @@ src/
 7. Use the same slug in every catalog file.
 8. Run the build before committing.
 
-Every catalog entry should include a title, description, tags, category, supported language and technologies, keywords, status, guide text, implementation files, a preview, and a usage example.
+Every catalog entry should include a title, description, tags, category, supported language and technologies, keywords, status, guide text, implementation files, a preview, and a usage example. Detail pages also show prerequisites, the Material UI install command, numbered implementation steps, and recommended file placement.
 
 Entries also require a semantic `version`, a `lastUpdated` date in `YYYY-MM-DD` format, and a direct Material UI `documentationUrl`. If an entry does not have an interactive preview yet, its slug must still be declared in the typed preview registry.
 

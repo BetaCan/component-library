@@ -39,8 +39,8 @@ export const componentCatalog: ComponentItem[] = [
     keywords: ['header', 'responsive navigation', 'routing', 'mobile menu', 'links'],
     guide: { whatItDoes: 'Provides a consistent header for branding and links between the main areas of an application.', howToUse: 'Place it near the top of your page and replace the example links with routes from your application.', importantCode: ['Toolbar provides the horizontal layout.', 'flexGrow pushes the navigation links to the right.', 'Button and Typography receive their visible content as children.'] },
     files: [
-      { name: 'NavigationBar.tsx', language: 'tsx', code: `import { AppBar, Button, Toolbar, Typography } from '@mui/material'\n\nexport function NavigationBar() {\n  return (\n    <AppBar position="static">\n      <Toolbar>\n        <Typography sx={{ flexGrow: 1 }}>My website</Typography>\n        <Button color="inherit">Home</Button>\n        <Button color="inherit">About</Button>\n      </Toolbar>\n    </AppBar>\n  )\n}` },
-      { name: 'App.tsx', language: 'tsx', code: `<NavigationBar />\n<main>Your page content goes here.</main>` },
+      { name: 'NavigationBar.tsx', language: 'tsx', code: `import { AppBar, Button, Toolbar, Typography } from '@mui/material'\n\ntype NavigationLink = {\n  label: string\n  href: string\n}\n\ntype NavigationBarProps = {\n  brand: string\n  links: NavigationLink[]\n}\n\nexport function NavigationBar({ brand, links }: NavigationBarProps) {\n  return (\n    <AppBar position="static">\n      <Toolbar>\n        <Typography sx={{ flexGrow: 1 }}>{brand}</Typography>\n        {links.map((link) => <Button key={link.href} color="inherit" href={link.href}>{link.label}</Button>)}\n      </Toolbar>\n    </AppBar>\n  )\n}` },
+      { name: 'App.tsx', language: 'tsx', code: `import { NavigationBar } from './NavigationBar'\n\nexport function App() {\n  return (\n    <>\n      <NavigationBar\n        brand="My website"\n        links={[{ label: 'Home', href: '/' }, { label: 'About', href: '/about' }]}\n      />\n      <main>Your page content goes here.</main>\n    </>\n  )\n}` },
     ],
   },
   {
@@ -59,7 +59,7 @@ export const componentCatalog: ComponentItem[] = [
     keywords: ['filtering', 'selection', 'state', 'categories', 'interactive'],
     guide: { whatItDoes: 'Lets users choose one category and gives immediate visual feedback for the selected value.', howToUse: 'Pass the available filter labels into a reusable version and use the selected value to filter the content shown elsewhere.', importantCode: ['useState stores the selected filter.', 'map creates one Chip for every option.', 'The selected value controls both the Chip appearance and the filtering decision.'] },
     files: [
-      { name: 'FilterChips.tsx', language: 'tsx', code: `import { Chip, Stack } from '@mui/material'\nimport { useState } from 'react'\n\nexport function FilterChips() {\n  const [selected, setSelected] = useState('All')\n  const filters = ['All', 'Cards', 'Navigation']\n\n  return (\n    <Stack direction="row" spacing={1}>\n      {filters.map((filter) => (\n        <Chip\n          key={filter}\n          label={filter}\n          color={selected === filter ? 'primary' : 'default'}\n          onClick={() => setSelected(filter)}\n        />\n      ))}\n    </Stack>\n  )\n}` },
+      { name: 'FilterChips.tsx', language: 'tsx', code: `import { Chip, Stack } from '@mui/material'\n\ntype FilterChipsProps = {\n  filters: string[]\n  selected: string\n  onChange: (filter: string) => void\n}\n\nexport function FilterChips({ filters, selected, onChange }: FilterChipsProps) {\n  return (\n    <Stack direction="row" spacing={1}>\n      {filters.map((filter) => (\n        <Chip\n          key={filter}\n          label={filter}\n          color={selected === filter ? 'primary' : 'default'}\n          onClick={() => onChange(filter)}\n        />\n      ))}\n    </Stack>\n  )\n}` },
     ],
   },
   {
@@ -98,7 +98,7 @@ export const componentCatalog: ComponentItem[] = [
     keywords: ['frequently asked questions', 'expandable', 'help centre', 'documentation', 'disclosure'],
     guide: { whatItDoes: 'Shows questions and answers in expandable sections so users can scan help content quickly.', howToUse: 'Replace the questions array with content from your product or pass it in as a prop when the data changes.', importantCode: ['The question and answer objects keep content separate from layout.', 'map creates a consistent Accordion for each question.', 'AccordionSummary is the visible control and AccordionDetails contains the revealed answer.'] },
     files: [
-      { name: 'FaqAccordion.tsx', language: 'tsx', code: `import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material'\n\nconst questions = [\n  { question: 'What is this?', answer: 'A reusable FAQ component.' },\n  { question: 'Can I customise it?', answer: 'Yes, pass your own questions and answers.' },\n]\n\nexport function FaqAccordion() {\n  return questions.map((item) => (\n    <Accordion key={item.question}>\n      <AccordionSummary expandIcon="⌄">\n        <Typography fontWeight={700}>{item.question}</Typography>\n      </AccordionSummary>\n      <AccordionDetails>{item.answer}</AccordionDetails>\n    </Accordion>\n  ))\n}` },
+      { name: 'FaqAccordion.tsx', language: 'tsx', code: `import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material'\n\ntype FaqItem = {\n  question: string\n  answer: string\n}\n\ntype FaqAccordionProps = {\n  items: FaqItem[]\n}\n\nexport function FaqAccordion({ items }: FaqAccordionProps) {\n  return items.map((item) => (\n    <Accordion key={item.question}>\n      <AccordionSummary expandIcon="⌄">\n        <Typography sx={{ fontWeight: 700 }}>{item.question}</Typography>\n      </AccordionSummary>\n      <AccordionDetails>{item.answer}</AccordionDetails>\n    </Accordion>\n  ))\n}` },
     ],
   },
   {
@@ -117,7 +117,7 @@ export const componentCatalog: ComponentItem[] = [
     keywords: ['subscription', 'product pricing', 'feature list', 'CTA', 'comparison'],
     guide: { whatItDoes: 'Summarises a product plan with its price, benefits, and primary action.', howToUse: 'Render one card for each plan and pass a different name, price, and features array to each one.', importantCode: ['features is an array so the list is data-driven.', 'featured is optional, allowing the highlighted style to be turned on only when needed.', 'The action remains the same component while the plan content changes through props.'] },
     files: [
-      { name: 'PricingCard.tsx', language: 'tsx', code: `import { Button, Card, CardContent, Chip, Stack, Typography } from '@mui/material'\n\ntype PricingCardProps = {\n  name: string\n  price: string\n  features: string[]\n  featured?: boolean\n}\n\nexport function PricingCard({ name, price, features, featured }: PricingCardProps) {\n  return (\n    <Card variant={featured ? 'elevation' : 'outlined'}>\n      <CardContent>\n        {featured && <Chip label="Most popular" color="primary" />}\n        <Typography variant="h5" sx={{ mt: 2 }}>{name}</Typography>\n        <Typography variant="h3" sx={{ my: 2 }}>{price}</Typography>\n        <Stack spacing={1} sx={{ mb: 3 }}>\n          {features.map((feature) => <Typography key={feature}>✓ {feature}</Typography>)}\n        </Stack>\n        <Button variant="contained" fullWidth>Choose plan</Button>\n      </CardContent>\n    </Card>\n  )\n}` },
+      { name: 'PricingCard.tsx', language: 'tsx', code: `import { Button, Card, CardContent, Chip, Stack, Typography } from '@mui/material'\n\ntype PricingCardProps = {\n  name: string\n  price: string\n  features: string[]\n  featured?: boolean\n  onChoose: () => void\n}\n\nexport function PricingCard({ name, price, features, featured, onChoose }: PricingCardProps) {\n  return (\n    <Card variant={featured ? 'elevation' : 'outlined'}>\n      <CardContent>\n        {featured && <Chip label="Most popular" color="primary" />}\n        <Typography variant="h5" sx={{ mt: 2 }}>{name}</Typography>\n        <Typography variant="h3" sx={{ my: 2 }}>{price}</Typography>\n        <Stack spacing={1} sx={{ mb: 3 }}>\n          {features.map((feature) => <Typography key={feature}>✓ {feature}</Typography>)}\n        </Stack>\n        <Button variant="contained" fullWidth onClick={onChoose}>Choose plan</Button>\n      </CardContent>\n    </Card>\n  )\n}` },
     ],
   },
   {
@@ -136,8 +136,8 @@ export const componentCatalog: ComponentItem[] = [
     keywords: ['login', 'authentication', 'email', 'password', 'validation'],
     guide: { whatItDoes: 'Collects the two values commonly needed to start an authentication request.', howToUse: 'Place it on a sign-in page and connect the form submit handler to your authentication service.', importantCode: ['type="email" gives the browser an appropriate input mode.', 'type="password" keeps the password hidden while typing.', 'The form should be connected to validation and a backend before being used in production.'] },
     files: [
-      { name: 'SignInForm.tsx', language: 'tsx', code: `import { Button, Stack, TextField, Typography } from '@mui/material'\n\nexport function SignInForm() {\n  return (\n    <Stack component="form" spacing={2} sx={{ maxWidth: 420 }}>\n      <Typography variant="h4">Sign in</Typography>\n      <TextField label="Email address" type="email" required />\n      <TextField label="Password" type="password" required />\n      <Button type="submit" variant="contained" size="large">Sign in</Button>\n    </Stack>\n  )\n}` },
-      { name: 'App.tsx', language: 'tsx', code: `<SignInForm />` },
+      { name: 'SignInForm.tsx', language: 'tsx', code: `import { Button, Stack, TextField, Typography } from '@mui/material'\n\ntype SignInFormProps = {\n  onSubmit: (values: { email: string; password: string }) => void\n}\n\nexport function SignInForm({ onSubmit }: SignInFormProps) {\n  return (\n    <Stack component="form" spacing={2} sx={{ maxWidth: 420 }} onSubmit={(event) => {\n      event.preventDefault()\n      const form = new FormData(event.currentTarget)\n      onSubmit({ email: String(form.get('email')), password: String(form.get('password')) })\n    }}>\n      <Typography variant="h4">Sign in</Typography>\n      <TextField name="email" label="Email address" type="email" required />\n      <TextField name="password" label="Password" type="password" required />\n      <Button type="submit" variant="contained" size="large">Sign in</Button>\n    </Stack>\n  )\n}` },
+      { name: 'App.tsx', language: 'tsx', code: `import { SignInForm } from './SignInForm'\n\nexport function LoginPage() {\n  return <SignInForm onSubmit={(values) => console.log('Sign in', values)} />\n}` },
     ],
   },
   {
@@ -155,7 +155,7 @@ export const componentCatalog: ComponentItem[] = [
     technologies: ['React', 'Material UI'],
     keywords: ['submit', 'loading state', 'async action', 'progress'],
     guide: { whatItDoes: 'Shows that an asynchronous action is still running and prevents duplicate submissions.', howToUse: 'Pass loading from the parent that owns the request state and switch it off when the request finishes.', importantCode: ['The loading prop makes the component controlled by its parent.', 'disabled prevents repeated clicks.', 'CircularProgress replaces the label without changing the button size.'] },
-    files: [{ name: 'LoadingButton.tsx', language: 'tsx', code: `import { Button, CircularProgress } from '@mui/material'\n\nexport function LoadingButton({ loading }: { loading: boolean }) {\n  return (\n    <Button variant="contained" disabled={loading}>\n      {loading ? <CircularProgress size={20} color="inherit" /> : 'Save changes'}\n    </Button>\n  )\n}` }],
+    files: [{ name: 'LoadingButton.tsx', language: 'tsx', code: `import { Button, CircularProgress } from '@mui/material'\n\ntype LoadingButtonProps = {\n  loading: boolean\n  label: string\n  onClick: () => void\n}\n\nexport function LoadingButton({ loading, label, onClick }: LoadingButtonProps) {\n  return (\n    <Button variant="contained" disabled={loading} onClick={onClick}>\n      {loading ? <CircularProgress size={20} color="inherit" aria-label="Loading" /> : label}\n    </Button>\n  )\n}` }],
   },
   {
     slug: 'profile-menu',
@@ -172,7 +172,7 @@ export const componentCatalog: ComponentItem[] = [
     technologies: ['React', 'Material UI'],
     keywords: ['account', 'avatar', 'settings', 'user menu'],
     guide: { whatItDoes: 'Groups account actions such as viewing a profile, changing settings, and signing out.', howToUse: 'Place the avatar in your header and replace the example menu items with actions from your application.', importantCode: ['anchor stores the element that opened the menu.', 'Boolean(anchor) determines whether the menu is open.', 'onClose clears the anchor and closes the menu.'] },
-    files: [{ name: 'ProfileMenu.tsx', language: 'tsx', code: `import { Avatar, Menu, MenuItem } from '@mui/material'\nimport { useState } from 'react'\n\nexport function ProfileMenu() {\n  const [anchor, setAnchor] = useState<null | HTMLElement>(null)\n  return (\n    <>\n      <Avatar onClick={(event) => setAnchor(event.currentTarget)}>JD</Avatar>\n      <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}>\n        <MenuItem>Profile</MenuItem>\n        <MenuItem>Settings</MenuItem>\n        <MenuItem>Sign out</MenuItem>\n      </Menu>\n    </>\n  )\n}` }],
+    files: [{ name: 'ProfileMenu.tsx', language: 'tsx', code: `import { Avatar, IconButton, Menu, MenuItem } from '@mui/material'\nimport { useState } from 'react'\n\ntype ProfileAction = {\n  label: string\n  onSelect: () => void\n}\n\ntype ProfileMenuProps = {\n  initials: string\n  actions: ProfileAction[]\n}\n\nexport function ProfileMenu({ initials, actions }: ProfileMenuProps) {\n  const [anchor, setAnchor] = useState<null | HTMLElement>(null)\n  return (\n    <>\n      <IconButton aria-label="Open profile menu" onClick={(event) => setAnchor(event.currentTarget)}>\n        <Avatar>{initials}</Avatar>\n      </IconButton>\n      <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}>\n        {actions.map((action) => <MenuItem key={action.label} onClick={() => { action.onSelect(); setAnchor(null) }}>{action.label}</MenuItem>)}\n      </Menu>\n    </>\n  )\n}` }],
   },
   {
     slug: 'data-table',
@@ -189,7 +189,7 @@ export const componentCatalog: ComponentItem[] = [
     technologies: ['React', 'Material UI'],
     keywords: ['rows', 'columns', 'dashboard', 'records', 'status'],
     guide: { whatItDoes: 'Displays records in rows and columns so related values can be compared quickly.', howToUse: 'Replace rows with data from your application and add TableCell elements for the columns your users need.', importantCode: ['rows is separate from the table structure.', 'map converts each record into a TableRow.', 'A stable row key helps React update the correct record.'] },
-    files: [{ name: 'DataTable.tsx', language: 'tsx', code: `import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'\n\nexport function DataTable() {\n  const rows = [{ name: 'Project Card', status: 'Ready' }, { name: 'FAQ', status: 'Draft' }]\n  return (\n    <Paper sx={{ overflowX: 'auto' }}>\n      <Table>\n        <TableHead><TableRow><TableCell>Name</TableCell><TableCell>Status</TableCell></TableRow></TableHead>\n        <TableBody>{rows.map((row) => <TableRow key={row.name}><TableCell>{row.name}</TableCell><TableCell>{row.status}</TableCell></TableRow>)}</TableBody>\n      </Table>\n    </Paper>\n  )\n}` }],
+    files: [{ name: 'DataTable.tsx', language: 'tsx', code: `import { Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'\n\ntype DataRow = {\n  id: string\n  name: string\n  status: string\n}\n\ntype DataTableProps = {\n  rows: DataRow[]\n}\n\nexport function DataTable({ rows }: DataTableProps) {\n  return (\n    <Paper sx={{ overflowX: 'auto' }}>\n      <Table>\n        <TableHead><TableRow><TableCell>Name</TableCell><TableCell>Status</TableCell></TableRow></TableHead>\n        <TableBody>{rows.map((row) => <TableRow key={row.id}><TableCell>{row.name}</TableCell><TableCell>{row.status}</TableCell></TableRow>)}</TableBody>\n      </Table>\n    </Paper>\n  )\n}` }],
   },
   {
     slug: 'breadcrumbs',
@@ -206,7 +206,7 @@ export const componentCatalog: ComponentItem[] = [
     technologies: ['React', 'Material UI'],
     keywords: ['current page', 'nested routes', 'navigation trail', 'links'],
     guide: { whatItDoes: 'Shows the user where they are inside a nested page or route hierarchy.', howToUse: 'Pass the page path in order and make every item except the current page navigate to its parent location.', importantCode: ['slice removes the current page from the links.', 'at(-1) selects the current page label.', 'The current page is Typography rather than a link.'] },
-    files: [{ name: 'Breadcrumbs.tsx', language: 'tsx', code: `import { Breadcrumbs as MuiBreadcrumbs, Link, Typography } from '@mui/material'\n\ntype BreadcrumbsProps = {\n  items: string[]\n}\n\nexport function Breadcrumbs({ items }: BreadcrumbsProps) {\n  return (\n    <MuiBreadcrumbs>\n      {items.slice(0, -1).map((item) => <Link key={item} href="#">{item}</Link>)}\n      <Typography color="text.primary">{items.at(-1)}</Typography>\n    </MuiBreadcrumbs>\n  )\n}` }],
+    files: [{ name: 'Breadcrumbs.tsx', language: 'tsx', code: `import { Breadcrumbs as MuiBreadcrumbs, Link, Typography } from '@mui/material'\n\ntype BreadcrumbItem = {\n  label: string\n  href: string\n}\n\ntype BreadcrumbsProps = {\n  items: BreadcrumbItem[]\n}\n\nexport function Breadcrumbs({ items }: BreadcrumbsProps) {\n  return (\n    <MuiBreadcrumbs aria-label="Breadcrumb">\n      {items.slice(0, -1).map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}\n      <Typography color="text.primary">{items.at(-1)?.label}</Typography>\n    </MuiBreadcrumbs>\n  )\n}` }],
   },
   {
     slug: 'search-field',
@@ -223,7 +223,7 @@ export const componentCatalog: ComponentItem[] = [
     technologies: ['React', 'Material UI'],
     keywords: ['query', 'search results', 'filtering', 'text input'],
     guide: { whatItDoes: 'Collects a search query that can be used to narrow a list of content.', howToUse: 'Keep the query in the parent or connect the change handler to the filtering function for your collection.', importantCode: ['value and onChange make the input controlled.', 'useState stores the current query.', 'InputAdornment adds a visual search cue without changing the input value.'] },
-    files: [{ name: 'SearchField.tsx', language: 'tsx', code: `import { InputAdornment, TextField } from '@mui/material'\nimport { useState } from 'react'\n\nexport function SearchField() {\n  const [query, setQuery] = useState('')\n  return (\n    <TextField\n      value={query}\n      onChange={(event) => setQuery(event.target.value)}\n      placeholder="Search components"\n      InputProps={{ startAdornment: <InputAdornment position="start">⌕</InputAdornment> }}\n    />\n  )\n}` }],
+    files: [{ name: 'SearchField.tsx', language: 'tsx', code: `import { InputAdornment, TextField } from '@mui/material'\n\ntype SearchFieldProps = {\n  value: string\n  onChange: (value: string) => void\n}\n\nexport function SearchField({ value, onChange }: SearchFieldProps) {\n  return (\n    <TextField\n      label="Search components"\n      value={value}\n      onChange={(event) => onChange(event.target.value)}\n      placeholder="Search components"\n      slotProps={{ input: { startAdornment: <InputAdornment position="start">⌕</InputAdornment> } }}\n    />\n  )\n}` }],
   },
   {
     slug: 'empty-state',
@@ -240,7 +240,7 @@ export const componentCatalog: ComponentItem[] = [
     technologies: ['React', 'Material UI'],
     keywords: ['no results', 'first use', 'guidance', 'action', 'helpful feedback'],
     guide: { whatItDoes: 'Explains why a page has no content and gives the user a useful next action.', howToUse: 'Render it when a collection is empty or a search produces no matches, passing a message that fits the situation.', importantCode: ['Props make the title, message, and action reusable.', 'children are not needed because the component has a focused content contract.', 'Stack handles the vertical spacing and alignment consistently.'] },
-    files: [{ name: 'EmptyState.tsx', language: 'tsx', code: `import { Button, Stack, Typography } from '@mui/material'\n\ntype EmptyStateProps = {\n  title: string\n  message: string\n  action: string\n}\n\nexport function EmptyState({ title, message, action }: EmptyStateProps) {\n  return (\n    <Stack alignItems="center" spacing={2} sx={{ py: 8, textAlign: 'center' }}>\n      <Typography variant="h5">{title}</Typography>\n      <Typography color="text.secondary">{message}</Typography>\n      <Button variant="contained">{action}</Button>\n    </Stack>\n  )\n}` }],
+    files: [{ name: 'EmptyState.tsx', language: 'tsx', code: `import { Button, Stack, Typography } from '@mui/material'\n\ntype EmptyStateProps = {\n  title: string\n  message: string\n  action: string\n  onAction: () => void\n}\n\nexport function EmptyState({ title, message, action, onAction }: EmptyStateProps) {\n  return (\n    <Stack sx={{ alignItems: 'center', spacing: 2, py: 8, textAlign: 'center' }}>\n      <Typography variant="h5">{title}</Typography>\n      <Typography color="text.secondary">{message}</Typography>\n      <Button variant="contained" onClick={onAction}>{action}</Button>\n    </Stack>\n  )\n}` }],
   },
   {
     slug: 'confirmation-dialog',
@@ -311,16 +311,18 @@ export function ConfirmationDialog({ open, title, message, onCancel, onConfirm }
       name: 'TabNavigation.tsx',
       language: 'tsx',
       code: `import { Box, Tab, Tabs, Typography } from '@mui/material'
-import { useState } from 'react'
 
-const views = ['Overview', 'Activity', 'Settings']
+type TabNavigationProps = {
+  views: string[]
+  selected: number
+  onChange: (nextValue: number) => void
+}
 
-export function TabNavigation() {
-  const [selected, setSelected] = useState(0)
+export function TabNavigation({ views, selected, onChange }: TabNavigationProps) {
 
   return (
     <Box>
-      <Tabs value={selected} onChange={(_, nextValue) => setSelected(nextValue)}>
+      <Tabs value={selected} onChange={(_, nextValue) => onChange(nextValue)}>
         {views.map((view) => <Tab key={view} label={view} />)}
       </Tabs>
       <Typography sx={{ p: 3 }}>Showing {views[selected]}</Typography>
@@ -393,17 +395,19 @@ export function SnackbarNotification({ open, message, onClose }: SnackbarNotific
       name: 'FormStepper.tsx',
       language: 'tsx',
       code: `import { Step, StepLabel, Stepper } from '@mui/material'
-import { useState } from 'react'
 
-const steps = ['Account', 'Details', 'Review']
+type FormStepperProps = {
+  steps: string[]
+  activeStep: number
+  onChange: (nextStep: number) => void
+}
 
-export function FormStepper() {
-  const [activeStep, setActiveStep] = useState(0)
+export function FormStepper({ steps, activeStep, onChange }: FormStepperProps) {
 
   return (
     <Stepper activeStep={activeStep}>
-      {steps.map((step) => (
-        <Step key={step} onClick={() => setActiveStep(steps.indexOf(step))}>
+      {steps.map((step, index) => (
+        <Step key={step} onClick={() => onChange(index)}>
           <StepLabel>{step}</StepLabel>
         </Step>
       ))}
@@ -435,10 +439,12 @@ export function FormStepper() {
       name: 'ImageUpload.tsx',
       language: 'tsx',
       code: `import { Button, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
 
-export function ImageUpload() {
-  const [fileName, setFileName] = useState('')
+type ImageUploadProps = {
+  onFileSelect: (file: File | undefined) => void
+}
+
+export function ImageUpload({ onFileSelect }: ImageUploadProps) {
 
   return (
     <Stack spacing={2}>
@@ -448,10 +454,10 @@ export function ImageUpload() {
           hidden
           type="file"
           accept="image/*"
-          onChange={(event) => setFileName(event.target.files?.[0]?.name ?? '')}
+          onChange={(event) => onFileSelect(event.target.files?.[0])}
         />
       </Button>
-      {fileName && <Typography color="text.secondary">{fileName}</Typography>}
+      <Typography color="text.secondary">Choose an image to send it to your upload handler.</Typography>
     </Stack>
   )
 }`,

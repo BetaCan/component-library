@@ -25,7 +25,10 @@ export function App() {
 export function App() {
   return (
     <>
-      <NavigationBar />
+      <NavigationBar
+        brand="My website"
+        links={[{ label: 'Home', href: '/' }, { label: 'About', href: '/about' }]}
+      />
       <main>Your page content goes here.</main>
     </>
   )
@@ -34,10 +37,12 @@ export function App() {
   'filter-chips': {
     name: 'ComponentFilters.tsx',
     language: 'tsx',
-    code: `import { FilterChips } from './FilterChips'
+    code: `import { useState } from 'react'
+import { FilterChips } from './FilterChips'
 
 export function ComponentFilters() {
-  return <FilterChips />
+  const [selected, setSelected] = useState('All')
+  return <FilterChips filters={['All', 'Cards', 'Navigation']} selected={selected} onChange={setSelected} />
 }`,
   },
   'alert-banner': {
@@ -61,7 +66,10 @@ export function SettingsPage() {
     code: `import { FaqAccordion } from './FaqAccordion'
 
 export function HelpPage() {
-  return <FaqAccordion />
+  return <FaqAccordion items={[
+    { question: 'What is this?', answer: 'A reusable FAQ component.' },
+    { question: 'Can I customise it?', answer: 'Yes, pass your own questions and answers.' },
+  ]} />
 }`,
   },
   'pricing-card': {
@@ -76,6 +84,7 @@ export function PricingPage() {
       price="$19 / month"
       features={['Unlimited projects', 'Priority support']}
       featured
+      onChoose={() => console.log('Selected Pro plan')}
     />
   )
 }`,
@@ -86,7 +95,7 @@ export function PricingPage() {
     code: `import { SignInForm } from './SignInForm'
 
 export function LoginPage() {
-  return <SignInForm />
+  return <SignInForm onSubmit={(values) => console.log('Sign in', values)} />
 }`,
   },
   'loading-button': {
@@ -95,7 +104,7 @@ export function LoginPage() {
     code: `import { LoadingButton } from './LoadingButton'
 
 export function SaveSettings({ saving }: { saving: boolean }) {
-  return <LoadingButton loading={saving} />
+  return <LoadingButton loading={saving} label="Save changes" onClick={() => console.log('Save settings')} />
 }`,
   },
   'profile-menu': {
@@ -104,7 +113,15 @@ export function SaveSettings({ saving }: { saving: boolean }) {
     code: `import { ProfileMenu } from './ProfileMenu'
 
 export function Header() {
-  return <ProfileMenu />
+  return (
+    <ProfileMenu
+      initials="JD"
+      actions={[
+        { label: 'Profile', onSelect: () => console.log('Open profile') },
+        { label: 'Settings', onSelect: () => console.log('Open settings') },
+        { label: 'Sign out', onSelect: () => console.log('Sign out') },
+      ]}
+    />
 }`,
   },
   'data-table': {
@@ -113,7 +130,10 @@ export function Header() {
     code: `import { DataTable } from './DataTable'
 
 export function Dashboard() {
-  return <DataTable />
+  return <DataTable rows={[
+    { id: 'project-card', name: 'Project Card', status: 'Ready' },
+    { id: 'faq', name: 'FAQ', status: 'Draft' },
+  ]} />
 }`,
   },
   breadcrumbs: {
@@ -124,7 +144,11 @@ export function Dashboard() {
 export function ComponentsPage() {
   return (
     <Breadcrumbs
-      items={['Home', 'Components', 'Cards']}
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Components', href: '/components' },
+        { label: 'Cards', href: '/components/cards' },
+      ]}
     />
   )
 }`,
@@ -132,10 +156,12 @@ export function ComponentsPage() {
   'search-field': {
     name: 'ComponentSearch.tsx',
     language: 'tsx',
-    code: `import { SearchField } from './SearchField'
+    code: `import { useState } from 'react'
+import { SearchField } from './SearchField'
 
 export function ComponentSearch() {
-  return <SearchField />
+  const [query, setQuery] = useState('')
+  return <SearchField value={query} onChange={setQuery} />
 }`,
   },
   'empty-state': {
@@ -149,6 +175,7 @@ export function ResultsPage() {
       title="No projects yet"
       message="Create your first project to get started."
       action="Create project"
+      onAction={() => console.log('Create project')}
     />
   )
 }`,
@@ -180,10 +207,12 @@ export function DeleteProject() {
   'tab-navigation': {
     name: 'Dashboard.tsx',
     language: 'tsx',
-    code: `import { TabNavigation } from './TabNavigation'
+    code: `import { useState } from 'react'
+import { TabNavigation } from './TabNavigation'
 
 export function Dashboard() {
-  return <TabNavigation />
+  const [selected, setSelected] = useState(0)
+  return <TabNavigation views={['Overview', 'Activity', 'Settings']} selected={selected} onChange={setSelected} />
 }`,
   },
   'snackbar-notification': {
@@ -211,10 +240,12 @@ export function SettingsPage() {
   'form-stepper': {
     name: 'OnboardingPage.tsx',
     language: 'tsx',
-    code: `import { FormStepper } from './FormStepper'
+    code: `import { useState } from 'react'
+import { FormStepper } from './FormStepper'
 
 export function OnboardingPage() {
-  return <FormStepper />
+  const [activeStep, setActiveStep] = useState(0)
+  return <FormStepper steps={['Account', 'Details', 'Review']} activeStep={activeStep} onChange={setActiveStep} />
 }`,
   },
   'image-upload': {
@@ -223,7 +254,7 @@ export function OnboardingPage() {
     code: `import { ImageUpload } from './ImageUpload'
 
 export function ProfileSettings() {
-  return <ImageUpload />
+  return <ImageUpload onFileSelect={(file) => console.log('Selected file', file)} />
 }`,
   },
   'list-item': {

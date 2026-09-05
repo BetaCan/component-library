@@ -13,6 +13,7 @@ const slugs = entryMatches.map((match) => match[1])
 const titles = entryMatches.map((match) => match[2].match(/title: '([^']+)'/)?.[1])
 const usageSlugs = new Set([...usageSource.matchAll(/^\s*['"]?([a-z0-9-]+)['"]?:\s*\{/gm)].map((match) => match[1]))
 const propsSlugs = new Set([...propsSource.matchAll(/^\s*['"]?([a-z0-9-]+)['"]?:\s*\[/gm)].map((match) => match[1]))
+const propEntries = [...propsSource.matchAll(/prop\('([^']+)',\s*'([^']+)',\s*(true|false),\s*'([^']+)'\)/g)]
 
 const getStringArray = (entry, field) => {
   const match = entry.match(new RegExp(`${field}: \\[([^\\]]*)\\]`))
@@ -84,6 +85,8 @@ for (const match of entryMatches) {
   }
   if (!guideMatch) {
     errors.push(`${slug}: guide must include whatItDoes, howToUse, and importantCode.`)
+  } else if ([...entry.matchAll(/(?:whatItDoes|howToUse): '([^']*)'/g)].some((guideField) => !guideField[1].trim())) {
+    errors.push(`${slug}: guide text must not be empty.`)
   }
   if (!usageSlugs.has(slug) || !usageMatch) {
     errors.push(`${slug}: usage example is missing from usageExamples.ts.`)
@@ -103,7 +106,19 @@ for (const match of entryMatches) {
   }
   if (!propsSlugs.has(slug)) {
     errors.push(`${slug}: props documentation is missing from propDocumentation.ts.`)
+  } else {
+    const propsEntry = propsSource.match(new RegExp(`['"]?${slug}['"]?:\\s*\\[([\\s\\S]*?)\\n\\s*\\],`, 'm'))
+    const documentedProps = propsEntry
+      ? [...propsEntry[1].matchAll(/prop\('([^']+)'/g)].map((propMatch) => propMatch[1])
+      : []
+    if (documentedProps.some((propName) => !usageMatch?.[1].includes(propName))) {
+      errors.push(`${slug}: usage example must demonstrate every documented prop.`)
+    }
   }
+}
+
+if (propEntries.some(([, , , description]) => !description.trim())) {
+  errors.push('Every documented prop must have a non-empty description.')
 }
 
 if (entryMatches.length === 0) {

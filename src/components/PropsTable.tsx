@@ -3,7 +3,7 @@ import type { ComponentProp } from '../types'
 
 export function PropsTable({ props }: { props: ComponentProp[] }) {
   if (props.length === 0) {
-    return <Typography color="text.secondary">This example does not define custom props yet.</Typography>
+    return <Typography color="text.secondary">This example does not require custom props. Its example values are currently defined inside the component.</Typography>
   }
 
   return (

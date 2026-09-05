@@ -157,7 +157,7 @@ function PricingPreview({ title }: { title: string }) {
               <Typography component="li" key={feature}>{feature}</Typography>
             ))}
           </Stack>
-          <Button variant="contained" onClick={() => setSelected(true)} disabled={selected}>
+          <Button variant="contained" onClick={() => setSelected(true)} disabled={selected} aria-label={`Choose ${title} plan`}>
             {selected ? 'Plan selected' : 'Choose plan'}
           </Button>
           {selected && <Alert severity="success">Pro plan selected.</Alert>}
@@ -220,7 +220,7 @@ function LoadingPreview() {
 
   return (
     <Stack spacing={2} sx={{ alignItems: 'center' }}>
-      <Button variant="contained" disabled={loading} onClick={handleClick}>
+      <Button variant="contained" disabled={loading} onClick={handleClick} aria-label="Save changes">
         {loading ? <CircularProgress size={20} color="inherit" aria-label="Saving" /> : 'Save changes'}
       </Button>
       {complete && <Alert severity="success">Changes saved.</Alert>}
@@ -296,22 +296,26 @@ function DataTablePreview() {
 
 function BreadcrumbsPreview() {
   const [current, setCurrent] = useState('Components')
-  const items = ['Home', 'Library', 'Components']
-  const currentIndex = items.indexOf(current)
+  const items = [
+    { label: 'Home', href: '/' },
+    { label: 'Library', href: '/library' },
+    { label: 'Components', href: '/components' },
+  ]
+  const currentIndex = items.findIndex((item) => item.label === current)
 
   return (
     <Stack spacing={2} sx={{ alignItems: 'center' }}>
       <MuiBreadcrumbs aria-label="Breadcrumb">
         {items.slice(0, currentIndex).map((item) => (
           <Link
-            key={item}
-            href="#"
+            key={item.href}
+            href={item.href}
             onClick={(event) => {
               event.preventDefault()
-              setCurrent(item)
+              setCurrent(item.label)
             }}
           >
-            {item}
+            {item.label}
           </Link>
         ))}
         <Typography color="text.primary">{current}</Typography>
@@ -337,7 +341,7 @@ function EmptyStatePreview({ title }: { title: string }) {
       <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
         <Typography variant="h6" sx={{ fontWeight: 800 }}>{title}</Typography>
         <Typography color="text.secondary">Create a project to organise your work and invite your team.</Typography>
-        <Button variant="contained" onClick={() => setCreated(true)}>Create project</Button>
+        <Button variant="contained" onClick={() => setCreated(true)} aria-label={`Create project from ${title}`}>Create project</Button>
       </Stack>
     )
 }
