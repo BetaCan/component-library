@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "validate:catalog": "node scripts/validate-catalog.mjs",
-    "build": "npm run validate:catalog && npm run lint && tsc -b && vite build",
+    "test:related": "node --experimental-strip-types --test scripts/test-related-components.mjs",
+    "build": "npm run validate:catalog && npm run lint && npm run test:related && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },

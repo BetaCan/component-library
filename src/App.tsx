@@ -67,7 +67,6 @@ function Header() {
         </Typography>
         <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Link component={RouterLink} to="/" underline="none" color="text.primary" sx={{ fontWeight: 700 }}>Components</Link>
-          <Link href="#about" underline="none" color="text.secondary">About</Link>
         </Stack>
         <Box sx={{ flexGrow: 1 }} />
         <Button component={Link} href="https://github.com" target="_blank" startIcon="◇" color="inherit" sx={{ display: { xs: 'none', sm: 'inline-flex' } }}>
@@ -172,11 +171,26 @@ function Gallery() {
   )
 }
 
+function NotFoundPage() {
+  return (
+    <Container maxWidth="md" sx={{ py: { xs: 10, md: 16 }, textAlign: 'center' }}>
+      <Typography variant="h1" sx={{ fontSize: { xs: '4rem', md: '6rem' }, color: 'primary.main' }}>404</Typography>
+      <Typography variant="h3" sx={{ fontWeight: 800, mb: 2 }}>Component not found</Typography>
+      <Typography color="text.secondary" sx={{ mb: 4 }}>
+        The component you are looking for does not exist or may have moved.
+      </Typography>
+      <Button component={RouterLink} to="/" variant="contained">
+        Return to component library
+      </Button>
+    </Container>
+  )
+}
+
 function DetailPage() {
   const { slug } = useParams()
-  const navigate = useNavigate()
   const item = slug ? getComponentBySlug(slug) : undefined
-  if (!item) return <Container sx={{ py: 10 }}><Typography variant="h3">Component not found</Typography></Container>
+  const navigate = useNavigate()
+  if (!item) return <NotFoundPage />
   const usageExample = slug ? usageExamples[slug] : undefined
   const props = slug ? propDocumentation[slug] ?? [] : []
 
@@ -184,7 +198,12 @@ function DetailPage() {
     <Container maxWidth="md" sx={{ py: { xs: 5, md: 8 } }}>
       <Button startIcon="←" onClick={() => navigate('/')} sx={{ mb: 5 }}>Back to components</Button>
       <Typography variant="overline" component="div" color="primary.main" sx={{ fontWeight: 900, textAlign: 'left' }}>{item.category}</Typography>
-      <Box sx={{ mt: 1, mb: 2 }}><ComponentStatus status={item.status} /></Box>
+      <Stack direction="row" spacing={1} sx={{ mt: 1, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+        <ComponentStatus status={item.status} />
+        <Typography variant="body2" color="text.secondary">
+          Version {item.version} · Updated {item.lastUpdated}
+        </Typography>
+      </Stack>
       <Typography variant="h1" sx={{ fontSize: { xs: '2.8rem', md: '4.5rem' }, mt: 1 }}>{item.title}</Typography>
       <Typography variant="h6" color="text.secondary" sx={{ mt: 2, mb: 4, fontWeight: 400 }}>{item.description}</Typography>
       <ComponentPreview item={item} />
@@ -212,7 +231,7 @@ function DetailPage() {
       <CodeTabs implementationFiles={item.files} usageFile={usageExample} optionalFiles={item.optionalFiles} />
       <Divider sx={{ my: 6 }} />
       <RelatedComponents current={item} items={components} />
-      <Button variant="contained" href="https://mui.com/material-ui/" target="_blank" sx={{ mt: 4 }}>Read the Material UI docs ↗</Button>
+      <Button variant="contained" href={item.documentationUrl} target="_blank" rel="noreferrer" sx={{ mt: 4 }}>Read the Material UI docs ↗</Button>
     </Container>
   )
 }
@@ -227,10 +246,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Gallery />} />
           <Route path="/components/:slug" element={<DetailPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
-        <Box component="footer" id="about" sx={{ borderTop: '1px solid #ebe7f2', py: 4, mt: 4 }}>
-          <Container maxWidth="lg"><Typography color="text.secondary">Built for learning, sharing, and reusing great UI.</Typography></Container>
-        </Box>
       </HashRouter>
     </ThemeProvider>
   )

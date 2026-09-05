@@ -11,14 +11,38 @@ export type ComponentProp = {
   description: string
 }
 
+export type ComponentSlug =
+  | 'project-card'
+  | 'navigation-bar'
+  | 'filter-chips'
+  | 'alert-banner'
+  | 'faq-accordion'
+  | 'pricing-card'
+  | 'sign-in-form'
+  | 'loading-button'
+  | 'profile-menu'
+  | 'data-table'
+  | 'breadcrumbs'
+  | 'search-field'
+  | 'empty-state'
+  | 'confirmation-dialog'
+  | 'tab-navigation'
+  | 'snackbar-notification'
+  | 'form-stepper'
+  | 'image-upload'
+  | 'list-item'
+
 export type ComponentItem = {
-  slug: string
+  slug: ComponentSlug
   title: string
   description: string
   tags: string[]
   image: string
   category: string
   status: 'Stable' | 'Experimental' | 'Needs testing'
+  version: string
+  lastUpdated: string
+  documentationUrl: string
   languages: string[]
   technologies: string[]
   keywords: string[]

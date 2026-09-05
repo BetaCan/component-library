@@ -20,6 +20,7 @@ import {
 import type { ComponentItem } from '../types'
 
 type PreviewComponent = ({ title }: { title: string }) => ReactElement
+type PreviewRegistry = Record<ComponentItem['slug'], PreviewComponent | undefined>
 
 function ProjectCardPreview({ title }: { title: string }) {
   return (
@@ -108,13 +109,26 @@ function SearchPreview() {
   )
 }
 
-const previews: Record<string, PreviewComponent> = {
+const previews: PreviewRegistry = {
   'project-card': ProjectCardPreview,
+  'navigation-bar': undefined,
   'filter-chips': FilterPreview,
   'alert-banner': AlertPreview,
+  'faq-accordion': undefined,
+  'pricing-card': undefined,
+  'sign-in-form': undefined,
+  'loading-button': undefined,
+  'profile-menu': undefined,
+  'data-table': undefined,
+  breadcrumbs: undefined,
   'confirmation-dialog': DialogPreview,
-  'tab-navigation': TabsPreview,
   'search-field': SearchPreview,
+  'empty-state': undefined,
+  'snackbar-notification': undefined,
+  'form-stepper': undefined,
+  'image-upload': undefined,
+  'list-item': undefined,
+  'tab-navigation': TabsPreview,
 }
 
 export function ComponentPreview({ item }: { item: ComponentItem }) {

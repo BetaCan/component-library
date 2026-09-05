@@ -2,19 +2,10 @@ import { Card, CardActionArea, CardContent, Chip, Stack, Typography } from '@mui
 import { Link as RouterLink } from 'react-router-dom'
 import type { ComponentItem } from '../types'
 import { ComponentStatus } from './ComponentStatus'
-
-function relevanceScore(source: ComponentItem, candidate: ComponentItem) {
-  const sharedKeywords = candidate.keywords.filter((keyword) => source.keywords.includes(keyword)).length
-  const sharedTechnologies = candidate.technologies.filter((technology) => source.technologies.includes(technology)).length
-  const sameCategory = source.category === candidate.category ? 1 : 0
-  return sharedKeywords + sharedTechnologies + sameCategory
-}
+import { getRelatedComponents } from './relatedComponents'
 
 export function RelatedComponents({ current, items }: { current: ComponentItem; items: ComponentItem[] }) {
-  const related = items
-    .filter((item) => item.slug !== current.slug)
-    .sort((first, second) => relevanceScore(current, second) - relevanceScore(current, first))
-    .slice(0, 3)
+  const related = getRelatedComponents(current, items)
 
   return (
     <section aria-labelledby="related-components-heading">

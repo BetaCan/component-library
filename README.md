@@ -57,6 +57,7 @@ src/
 │   ├── FilterGroup.tsx
 │   ├── PropsTable.tsx
 │   ├── RelatedComponents.tsx
+│   ├── relatedComponents.ts
 │   └── TechnologyChips.tsx
 ├── hooks/
 │   └── useComponentFilters.ts
@@ -80,7 +81,20 @@ src/
 
 Every catalog entry should include a title, description, tags, category, supported language and technologies, keywords, status, guide text, implementation files, a preview, and a usage example.
 
+Entries also require a semantic `version`, a `lastUpdated` date in `YYYY-MM-DD` format, and a direct Material UI `documentationUrl`. If an entry does not have an interactive preview yet, its slug must still be declared in the typed preview registry.
+
 Use only truthful technology metadata. Do not list a language or framework until the displayed code actually implements that version.
+
+Before committing, run:
+
+```bash
+npm run validate:catalog
+npm run lint
+npm run test:related
+npm run build
+```
+
+See [CHANGELOG.md](CHANGELOG.md) for a summary of project improvements.
 
 ## Code standards
 
