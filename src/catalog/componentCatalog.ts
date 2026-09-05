@@ -190,6 +190,240 @@ export const componentCatalog: ComponentItem[] = [
     guide: { whatItDoes: 'Explains why a page has no content and gives the user a useful next action.', howToUse: 'Render it when a collection is empty or a search produces no matches, passing a message that fits the situation.', importantCode: ['Props make the title, message, and action reusable.', 'children are not needed because the component has a focused content contract.', 'Stack handles the vertical spacing and alignment consistently.'] },
     files: [{ name: 'EmptyState.tsx', language: 'tsx', code: `import { Button, Stack, Typography } from '@mui/material'\n\ntype EmptyStateProps = {\n  title: string\n  message: string\n  action: string\n}\n\nexport function EmptyState({ title, message, action }: EmptyStateProps) {\n  return (\n    <Stack alignItems="center" spacing={2} sx={{ py: 8, textAlign: 'center' }}>\n      <Typography variant="h5">{title}</Typography>\n      <Typography color="text.secondary">{message}</Typography>\n      <Button variant="contained">{action}</Button>\n    </Stack>\n  )\n}` }],
   },
+  {
+    slug: 'confirmation-dialog',
+    title: 'Confirmation Dialog',
+    description: 'A focused decision prompt for actions that need confirmation before continuing.',
+    tags: ['Dialog', 'Confirmation', 'Actions'],
+    image: assetPath('previews/confirmation-dialog.svg'),
+    category: 'Feedback',
+    languages: ['TypeScript'],
+    technologies: ['React', 'Material UI'],
+    keywords: ['confirm', 'modal', 'destructive action', 'cancel', 'submit'],
+    guide: {
+      whatItDoes: 'Pauses an important action and asks the user to confirm or cancel it.',
+      howToUse: 'Keep the open state in the parent and provide callbacks for the cancel and confirm actions.',
+      importantCode: ['open controls whether the dialog is visible.', 'onClose handles dismissing the dialog.', 'Actions are explicit buttons so the user understands the consequence.'],
+    },
+    files: [{
+      name: 'ConfirmationDialog.tsx',
+      language: 'tsx',
+      code: `import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
+
+type ConfirmationDialogProps = {
+  open: boolean
+  title: string
+  message: string
+  onCancel: () => void
+  onConfirm: () => void
+}
+
+export function ConfirmationDialog({ open, title, message, onCancel, onConfirm }: ConfirmationDialogProps) {
+  return (
+    <Dialog open={open} onClose={onCancel}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>{message}</DialogContent>
+      <DialogActions>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button onClick={onConfirm} variant="contained">Confirm</Button>
+      </DialogActions>
+    </Dialog>
+  )
+}`,
+    }],
+  },
+  {
+    slug: 'tab-navigation',
+    title: 'Tab Navigation',
+    description: 'A compact way to switch between related views without leaving the page.',
+    tags: ['Tabs', 'Navigation', 'Views'],
+    image: assetPath('previews/tab-navigation.svg'),
+    category: 'Navigation',
+    languages: ['TypeScript'],
+    technologies: ['React', 'Material UI'],
+    keywords: ['sections', 'active view', 'switching', 'dashboard', 'navigation'],
+    guide: {
+      whatItDoes: 'Lets users switch between related sections while keeping the surrounding page context.',
+      howToUse: 'Store the active tab in state and render the matching content below the tab list.',
+      importantCode: ['value identifies the active tab.', 'onChange updates state when a user selects another tab.', 'Tab labels should describe the content users will see.'],
+    },
+    files: [{
+      name: 'TabNavigation.tsx',
+      language: 'tsx',
+      code: `import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { useState } from 'react'
+
+const views = ['Overview', 'Activity', 'Settings']
+
+export function TabNavigation() {
+  const [selected, setSelected] = useState(0)
+
+  return (
+    <Box>
+      <Tabs value={selected} onChange={(_, nextValue) => setSelected(nextValue)}>
+        {views.map((view) => <Tab key={view} label={view} />)}
+      </Tabs>
+      <Typography sx={{ p: 3 }}>Showing {views[selected]}</Typography>
+    </Box>
+  )
+}`,
+    }],
+  },
+  {
+    slug: 'snackbar-notification',
+    title: 'Snackbar Notification',
+    description: 'A brief, non-blocking message that confirms an action or reports a result.',
+    tags: ['Snackbar', 'Feedback', 'Notification'],
+    image: assetPath('previews/snackbar-notification.svg'),
+    category: 'Feedback',
+    languages: ['TypeScript'],
+    technologies: ['React', 'Material UI'],
+    keywords: ['toast', 'success', 'dismissible', 'temporary message'],
+    guide: {
+      whatItDoes: 'Shows a short-lived message near the edge of the screen without interrupting the current task.',
+      howToUse: 'Keep the open state and message in the parent, then open the Snackbar after an action completes.',
+      importantCode: ['open controls whether the notification is visible.', 'autoHideDuration removes it after a set period.', 'onClose lets the parent clear the notification state.'],
+    },
+    files: [{
+      name: 'SnackbarNotification.tsx',
+      language: 'tsx',
+      code: `import { Alert, Snackbar } from '@mui/material'
+
+type SnackbarNotificationProps = {
+  open: boolean
+  message: string
+  onClose: () => void
+}
+
+export function SnackbarNotification({ open, message, onClose }: SnackbarNotificationProps) {
+  return (
+    <Snackbar open={open} autoHideDuration={4000} onClose={onClose}>
+      <Alert onClose={onClose} severity="success" variant="filled">
+        {message}
+      </Alert>
+    </Snackbar>
+  )
+}`,
+    }],
+  },
+  {
+    slug: 'form-stepper',
+    title: 'Form Stepper',
+    description: 'A clear progress indicator for forms and workflows split across multiple steps.',
+    tags: ['Stepper', 'Forms', 'Progress'],
+    image: assetPath('previews/form-stepper.svg'),
+    category: 'Forms',
+    languages: ['TypeScript'],
+    technologies: ['React', 'Material UI'],
+    keywords: ['multi-step form', 'progress', 'wizard', 'checkout', 'workflow'],
+    guide: {
+      whatItDoes: 'Shows progress through a sequence of related steps, such as onboarding or checkout.',
+      howToUse: 'Store the active step in state and render the fields or content that belong to that step.',
+      importantCode: ['activeStep identifies the current step.', 'Stepper renders the sequence from the steps array.', 'StepLabel gives each position a readable name.'],
+    },
+    files: [{
+      name: 'FormStepper.tsx',
+      language: 'tsx',
+      code: `import { Step, StepLabel, Stepper } from '@mui/material'
+import { useState } from 'react'
+
+const steps = ['Account', 'Details', 'Review']
+
+export function FormStepper() {
+  const [activeStep, setActiveStep] = useState(0)
+
+  return (
+    <Stepper activeStep={activeStep}>
+      {steps.map((step) => (
+        <Step key={step} onClick={() => setActiveStep(steps.indexOf(step))}>
+          <StepLabel>{step}</StepLabel>
+        </Step>
+      ))}
+    </Stepper>
+  )
+}`,
+    }],
+  },
+  {
+    slug: 'image-upload',
+    title: 'Image Upload',
+    description: 'A simple file input that gives users a clear way to choose an image.',
+    tags: ['Upload', 'Form', 'Files'],
+    image: assetPath('previews/image-upload.svg'),
+    category: 'Forms',
+    languages: ['TypeScript'],
+    technologies: ['React', 'Material UI'],
+    keywords: ['file input', 'preview', 'avatar', 'media', 'validation'],
+    guide: {
+      whatItDoes: 'Provides a styled control for selecting an image file from the user’s device.',
+      howToUse: 'Use the selected File object to create a preview or send it to your upload endpoint.',
+      importantCode: ['accept limits the picker to image files.', 'The change event provides the selected File object.', 'The browser input should be validated before uploading.'],
+    },
+    files: [{
+      name: 'ImageUpload.tsx',
+      language: 'tsx',
+      code: `import { Button, Stack, Typography } from '@mui/material'
+import { useState } from 'react'
+
+export function ImageUpload() {
+  const [fileName, setFileName] = useState('')
+
+  return (
+    <Stack spacing={2}>
+      <Button component="label" variant="outlined">
+        Choose image
+        <input
+          hidden
+          type="file"
+          accept="image/*"
+          onChange={(event) => setFileName(event.target.files?.[0]?.name ?? '')}
+        />
+      </Button>
+      {fileName && <Typography color="text.secondary">{fileName}</Typography>}
+    </Stack>
+  )
+}`,
+    }],
+  },
+  {
+    slug: 'list-item',
+    title: 'List Item',
+    description: 'A reusable row for displaying a title, supporting detail, and an optional action.',
+    tags: ['List', 'Content', 'Actions'],
+    image: assetPath('previews/list-item.svg'),
+    category: 'Data display',
+    languages: ['TypeScript'],
+    technologies: ['React', 'Material UI'],
+    keywords: ['row', 'collection', 'avatar', 'secondary text', 'action'],
+    guide: {
+      whatItDoes: 'Presents one item in a collection with a predictable layout and an optional trailing action.',
+      howToUse: 'Render it repeatedly from an array of records and pass the content for each row as props.',
+      importantCode: ['ListItemText separates the primary and secondary content.', 'ListItemAvatar gives every row a consistent visual anchor.', 'ListItemSecondaryAction keeps actions aligned at the end of the row.'],
+    },
+    files: [{
+      name: 'ListItem.tsx',
+      language: 'tsx',
+      code: `import { Avatar, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@mui/material'
+
+type ListItemProps = {
+  title: string
+  detail: string
+  onOpen: () => void
+}
+
+export function CollectionListItem({ title, detail, onOpen }: ListItemProps) {
+  return (
+    <ListItem>
+      <ListItemAvatar><Avatar>{title[0]}</Avatar></ListItemAvatar>
+      <ListItemText primary={title} secondary={detail} />
+      <ListItemSecondaryAction>
+        <IconButton edge="end" onClick={onOpen} aria-label={\`Open \${title}\`}>→</IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  )
+}`,
+    }],
+  },
 ]
 
 export function getComponentBySlug(slug: string) {

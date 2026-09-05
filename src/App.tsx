@@ -20,8 +20,10 @@ import { HashRouter, Link as RouterLink, Route, Routes, useNavigate, useParams }
 import { CodeBlock } from './components/CodeBlock'
 import { FilterGroup } from './components/FilterGroup'
 import { TechnologyChips } from './components/TechnologyChips'
+import { UsageExample } from './components/UsageExample'
 import { useComponentFilters } from './hooks/useComponentFilters'
 import { componentCatalog, getComponentBySlug } from './catalog/componentCatalog'
+import { usageExamples } from './catalog/usageExamples'
 
 const components = componentCatalog
 
@@ -63,7 +65,19 @@ function ComponentCard({ item }: { item: (typeof componentCatalog)[number] }) {
   return (
     <Card elevation={0} sx={{ height: '100%', border: '1px solid #e7e1f0', transition: 'transform .2s, box-shadow .2s', '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 14px 30px rgba(61, 38, 91, .12)' } }}>
       <CardActionArea component={RouterLink} to={`/components/${item.slug}`} sx={{ height: '100%', display: 'flex', alignItems: 'stretch', flexDirection: 'column' }}>
-        <Box component="img" src={item.image} alt={`${item.title} preview`} sx={{ width: '100%', height: 210, objectFit: 'cover', objectPosition: 'top', bgcolor: '#17151c' }} />
+        <Box
+          component="img"
+          src={item.image}
+          alt={`${item.title} preview`}
+          sx={{
+            display: 'block',
+            width: '100%',
+            aspectRatio: '16 / 9',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            bgcolor: '#f7f4fc',
+          }}
+        />
         <CardContent sx={{ p: 3, flexGrow: 1 }}>
           <Typography variant="overline" color="primary.main" sx={{ fontWeight: 800 }}>{item.category}</Typography>
           <Typography variant="h5" sx={{ mt: .5, mb: 1, fontWeight: 800 }}>{item.title}</Typography>
@@ -125,6 +139,7 @@ function DetailPage() {
   const navigate = useNavigate()
   const item = slug ? getComponentBySlug(slug) : undefined
   if (!item) return <Container sx={{ py: 10 }}><Typography variant="h3">Component not found</Typography></Container>
+  const usageExample = slug ? usageExamples[slug] : undefined
 
   return (
     <Container maxWidth="md" sx={{ py: { xs: 5, md: 8 } }}>
@@ -150,6 +165,12 @@ function DetailPage() {
       <Stack spacing={3}>
         {item.files.map((file) => <CodeBlock key={file.name} file={file} />)}
       </Stack>
+      {usageExample && (
+        <>
+          <Divider sx={{ my: 6 }} />
+          <UsageExample file={usageExample} />
+        </>
+      )}
       <Button variant="contained" href="https://mui.com/material-ui/" target="_blank" sx={{ mt: 4 }}>Read the Material UI docs ↗</Button>
     </Container>
   )

@@ -15,4 +15,6 @@ Each entry should provide:
 - `guide`: what the component does, how it is used, and important code ideas
 - `files`: copyable source files
 
+Add the matching import-and-render example in `usageExamples.ts`. Keep implementation code and calling code separate so users can understand both parts.
+
 Keep shared presentation in `src/components` and keep stateful, reusable logic in `src/hooks`. Catalog entries should describe a component rather than contain page layout logic.
