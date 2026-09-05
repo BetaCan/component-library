@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <rect width="900" height="520" fill="#f7f4fc"/>
+  <rect x="34" y="34" width="832" height="452" rx="18" fill="#fff"/>
+  <rect x="34" y="34" width="832" height="210" rx="18" fill="#6750a4"/>
+  <circle cx="80" cy="80" r="10" fill="#fff" opacity=".8"/>
+  <circle cx="112" cy="80" r="10" fill="#fff" opacity=".5"/>
+  <circle cx="144" cy="80" r="10" fill="#fff" opacity=".3"/>
+  <text x="70" y="170" font-family="Arial,sans-serif" font-size="42" font-weight="700" fill="#fff">Project preview</text>
+  <text x="70" y="310" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#211d2b">ShiftBoard</text>
+  <text x="70" y="350" font-family="Arial,sans-serif" font-size="20" fill="#6b6475">A reusable project card component</text>
+  <rect x="70" y="390" width="120" height="38" rx="19" fill="#eee9fa"/><text x="92" y="416" font-family="Arial,sans-serif" font-size="16" fill="#6750a4">TypeScript</text>
+  <rect x="204" y="390" width="105" height="38" rx="19" fill="#eee9fa"/><text x="226" y="416" font-family="Arial,sans-serif" font-size="16" fill="#6750a4">React</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <rect width="900" height="520" fill="#fff"/>
+  <text x="70" y="90" font-family="Arial,sans-serif" font-size="38" font-weight="700" fill="#211d2b">Frequently asked questions</text>
+  <rect x="70" y="145" width="760" height="70" rx="10" fill="#f7f4fc"/><text x="100" y="188" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#211d2b">What is this component?</text><text x="780" y="188" font-family="Arial,sans-serif" font-size="25" fill="#6750a4">⌄</text>
+  <rect x="70" y="235" width="760" height="115" rx="10" fill="#eee9fa"/><text x="100" y="278" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#211d2b">Can I customise it?</text><text x="780" y="278" font-family="Arial,sans-serif" font-size="25" fill="#6750a4">⌃</text><text x="100" y="320" font-family="Arial,sans-serif" font-size="18" fill="#6b6475">Yes. Pass your own questions and answers as data.</text>
+  <rect x="70" y="370" width="760" height="70" rx="10" fill="#f7f4fc"/><text x="100" y="413" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#211d2b">How do I get started?</text><text x="780" y="413" font-family="Arial,sans-serif" font-size="25" fill="#6750a4">⌄</text>
+</svg>

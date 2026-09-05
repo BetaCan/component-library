@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <rect width="900" height="520" fill="#f7f4fc"/>
+  <rect x="60" y="70" width="780" height="110" rx="14" fill="#e2f5e9" stroke="#8bc99b" stroke-width="2"/>
+  <circle cx="110" cy="125" r="23" fill="#2e8b57"/><text x="101" y="134" font-family="Arial,sans-serif" font-size="26" fill="#fff">✓</text>
+  <text x="155" y="116" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#205b38">Saved successfully</text>
+  <text x="155" y="150" font-family="Arial,sans-serif" font-size="18" fill="#39714d">Your changes are now live.</text>
+  <rect x="60" y="240" width="780" height="110" rx="14" fill="#fff4d6" stroke="#e2bd58" stroke-width="2"/>
+  <circle cx="110" cy="295" r="23" fill="#bc8a00"/><text x="103" y="304" font-family="Arial,sans-serif" font-size="26" fill="#fff">!</text>
+  <text x="155" y="286" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#745900">Action needed</text>
+  <text x="155" y="320" font-family="Arial,sans-serif" font-size="18" fill="#876d20">Review your settings before continuing.</text>
+</svg>
