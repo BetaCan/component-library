@@ -18,12 +18,11 @@ import {
   createTheme,
 } from '@mui/material'
 import { HashRouter, Link as RouterLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
-import { CodeBlock } from './components/CodeBlock'
+import { CodeTabs } from './components/CodeTabs'
 import { ComponentSearch } from './components/ComponentSearch'
 import { FilterGroup } from './components/FilterGroup'
 import { PropsTable } from './components/PropsTable'
 import { TechnologyChips } from './components/TechnologyChips'
-import { UsageExample } from './components/UsageExample'
 import { useComponentFilters } from './hooks/useComponentFilters'
 import { componentCatalog, getComponentBySlug } from './catalog/componentCatalog'
 import { usageExamples } from './catalog/usageExamples'
@@ -191,16 +190,8 @@ function DetailPage() {
       <PropsTable props={props} />
       <Divider sx={{ my: 6 }} />
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>Code</Typography>
-      <Typography color="text.secondary" sx={{ mb: 3 }}>Copy each file into your project. Some components need more than one file to work.</Typography>
-      <Stack spacing={3}>
-        {item.files.map((file) => <CodeBlock key={file.name} file={file} />)}
-      </Stack>
-      {usageExample && (
-        <>
-          <Divider sx={{ my: 6 }} />
-          <UsageExample file={usageExample} />
-        </>
-      )}
+      <Typography color="text.secondary" sx={{ mb: 3 }}>Use the tabs to move between the component, an example call, and any supporting files.</Typography>
+      <CodeTabs implementationFiles={item.files} usageFile={usageExample} optionalFiles={item.optionalFiles} />
       <Button variant="contained" href="https://mui.com/material-ui/" target="_blank" sx={{ mt: 4 }}>Read the Material UI docs ↗</Button>
     </Container>
   )

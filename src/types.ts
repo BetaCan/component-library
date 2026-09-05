@@ -27,4 +27,5 @@ export type ComponentItem = {
     importantCode: string[]
   }
   files: ComponentFile[]
+  optionalFiles?: ComponentFile[]
 }
