@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "validate:catalog": "node scripts/validate-catalog.mjs",
+    "build": "npm run validate:catalog && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
