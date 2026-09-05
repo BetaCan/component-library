@@ -9,6 +9,7 @@ import {
   Container,
   CssBaseline,
   Divider,
+  Paper,
   Link,
   Stack,
   ThemeProvider,
@@ -18,12 +19,15 @@ import {
 } from '@mui/material'
 import { HashRouter, Link as RouterLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import { CodeBlock } from './components/CodeBlock'
+import { ComponentSearch } from './components/ComponentSearch'
 import { FilterGroup } from './components/FilterGroup'
+import { PropsTable } from './components/PropsTable'
 import { TechnologyChips } from './components/TechnologyChips'
 import { UsageExample } from './components/UsageExample'
 import { useComponentFilters } from './hooks/useComponentFilters'
 import { componentCatalog, getComponentBySlug } from './catalog/componentCatalog'
 import { usageExamples } from './catalog/usageExamples'
+import { propDocumentation } from './catalog/propDocumentation'
 
 const components = componentCatalog
 
@@ -99,10 +103,12 @@ function Gallery() {
     categories,
     filteredItems,
     filters,
+    setSearch,
     setLanguage,
     setTechnology,
     setCategory,
   } = useComponentFilters(components)
+  const hasActiveFilters = Boolean(filters.search) || filters.language !== 'All languages' || filters.technology !== 'All technologies' || filters.category !== 'All categories'
 
   return (
     <>
@@ -118,13 +124,31 @@ function Gallery() {
       <Container maxWidth="lg" sx={{ py: { xs: 5, md: 8 } }}>
         <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ justifyContent: 'space-between', alignItems: { sm: 'center' }, gap: 2, mb: 4 }}>
           <Typography variant="h4" sx={{ fontWeight: 800 }}>Browse components</Typography>
-          <Typography color="text.secondary">Choose the language and tools you are using.</Typography>
         </Stack>
-        <Stack spacing={2} sx={{ mb: 5 }}>
-          <FilterGroup label="Language" options={languages} value={filters.language} onChange={setLanguage} />
-          <FilterGroup label="Framework / library" options={technologies} value={filters.technology} onChange={setTechnology} />
-          <FilterGroup label="Component type" options={categories} value={filters.category} onChange={setCategory} />
-        </Stack>
+        <Paper variant="outlined" sx={{ p: { xs: 2, sm: 3 }, mb: 5, borderColor: '#e7e1f0', bgcolor: 'rgba(255,255,255,.7)' }}>
+          <Stack spacing={3}>
+            <ComponentSearch value={filters.search} onChange={setSearch} resultCount={filteredItems.length} />
+            <Stack spacing={2} sx={{ pt: 2, borderTop: '1px solid #eeeaf4' }}>
+              <FilterGroup label="Language" options={languages} value={filters.language} onChange={setLanguage} />
+              <FilterGroup label="Framework / library" options={technologies} value={filters.technology} onChange={setTechnology} />
+              <FilterGroup label="Component type" options={categories} value={filters.category} onChange={setCategory} />
+            </Stack>
+          </Stack>
+          {hasActiveFilters && (
+            <Button
+              size="small"
+              onClick={() => {
+                setSearch('')
+                setLanguage('All languages')
+                setTechnology('All technologies')
+                setCategory('All categories')
+              }}
+              sx={{ mt: 2, px: 0 }}
+            >
+              Clear filters
+            </Button>
+          )}
+        </Paper>
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: 3 }}>
           {filteredItems.map((item) => <ComponentCard key={item.slug} item={item} />)}
         </Box>
@@ -140,6 +164,7 @@ function DetailPage() {
   const item = slug ? getComponentBySlug(slug) : undefined
   if (!item) return <Container sx={{ py: 10 }}><Typography variant="h3">Component not found</Typography></Container>
   const usageExample = slug ? usageExamples[slug] : undefined
+  const props = slug ? propDocumentation[slug] ?? [] : []
 
   return (
     <Container maxWidth="md" sx={{ py: { xs: 5, md: 8 } }}>
@@ -159,6 +184,11 @@ function DetailPage() {
           </Box>
         ))}
       </Stack>
+      <Typography variant="h5" sx={{ fontWeight: 800, mb: 2, mt: 5 }}>Props</Typography>
+      <Typography color="text.secondary" sx={{ mb: 3, lineHeight: 1.7 }}>
+        These are the values the component accepts from the code that calls it.
+      </Typography>
+      <PropsTable props={props} />
       <Divider sx={{ my: 6 }} />
       <Typography variant="h4" sx={{ fontWeight: 800, mb: 2 }}>Code</Typography>
       <Typography color="text.secondary" sx={{ mb: 3 }}>Copy each file into your project. Some components need more than one file to work.</Typography>

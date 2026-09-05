@@ -4,6 +4,13 @@ export type ComponentFile = {
   code: string
 }
 
+export type ComponentProp = {
+  name: string
+  type: string
+  required: boolean
+  description: string
+}
+
 export type ComponentItem = {
   slug: string
   title: string
