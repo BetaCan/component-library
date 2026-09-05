@@ -14,6 +14,10 @@ export type ComponentItem = {
   languages: string[]
   technologies: string[]
   keywords: string[]
-  setup: string[]
+  guide: {
+    whatItDoes: string
+    howToUse: string
+    importantCode: string[]
+  }
   files: ComponentFile[]
 }
