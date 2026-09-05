@@ -17,7 +17,8 @@ import {
   Typography,
   createTheme,
 } from '@mui/material'
-import { HashRouter, Link as RouterLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { HashRouter, Link as RouterLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { CodeTabs } from './components/CodeTabs'
 import { ComponentPreview } from './components/ComponentPreview'
 import { ComponentSearch } from './components/ComponentSearch'
@@ -44,6 +45,16 @@ const theme = createTheme({
   },
   shape: { borderRadius: 16 },
 })
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname])
+
+  return null
+}
 
 function Header() {
   return (
@@ -205,6 +216,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <HashRouter>
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<Gallery />} />
